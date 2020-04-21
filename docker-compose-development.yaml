@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/dist
+      - /app/node_modules
+    ports:
+      - 3010:3010
+    command: npm run start:dev

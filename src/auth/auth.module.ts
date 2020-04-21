@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
+// import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
@@ -8,7 +8,7 @@ import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
-    UsersModule,
+    // UsersModule,
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,

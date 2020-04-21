@@ -3,8 +3,6 @@ build:
   image: docker:latest
   services:
     - docker:dind
-  variables:
-    IMAGE: registry.gitlab.com/qrinef/crm-frontend-nuxt
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE .

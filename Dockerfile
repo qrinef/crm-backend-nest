@@ -16,7 +16,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm ci
 
 COPY --from=development /app/dist ./dist
 COPY --from=development /app/ormconfig.json ./ormconfig.json

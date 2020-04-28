@@ -1,49 +1,62 @@
 import { Injectable } from '@nestjs/common';
-// import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { randomBytes } from 'crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UsersService } from '../users/users.service';
+import { Auth } from './auth.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    // private usersService: UsersService,
+    @InjectRepository(Auth) private authRepository: Repository<Auth>,
     private jwtService: JwtService,
+    private readonly usersService: UsersService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    // const user = await this.usersService.findOne(username);
-    // if (user && user.password === pass) {
-    //   const { password, ...result } = user;
-    //   return result;
-    // }
-    // return null;
-  }
-
   async login(email: string, password: string) {
-    const payload = { email, password };
-    const refreshToken = randomBytes(64).toString('hex');
+    const loginResults = await this.usersService.login(email, password);
+
+    if (!loginResults) {
+      return null;
+    }
+
+    let authEntity = new Auth();
+    authEntity.user = loginResults;
+
+    const refreshToken = await this.authRepository.save(authEntity);
 
     return {
-      token: this.jwtService.sign(payload),
-      refresh_token: refreshToken,
+      token: this.jwtService.sign({ email }, { expiresIn: 180 }),
+      refreshToken: this.jwtService.sign({
+        exp: refreshToken.refreshTokenExpiration,
+      }),
+      liveRefreshToken: refreshToken.refreshToken,
     };
   }
 
-  public async refreshToken(oldRefreshToken: string): Promise<any> {
-    const payload = { email: 'test', password: 'test' };
-    const refreshToken = randomBytes(64).toString('hex');
+  public async refreshToken(refreshToken: string) {
+    const refresh = await this.authRepository.findOne({ refreshToken });
+    await this.authRepository.remove(refresh);
+    const loginResults = await this.usersService.findUser(refresh.user);
+
+    let authEntity = new Auth();
+    authEntity.user = loginResults;
+
+    const rt = await this.authRepository.save(authEntity);
 
     return {
-      token: this.jwtService.sign(payload),
-      refresh_token: refreshToken,
+      token: this.jwtService.sign(
+        { email: loginResults.email },
+        { expiresIn: 180 },
+      ),
+      refreshToken: this.jwtService.sign({
+        exp: rt.refreshTokenExpiration,
+      }),
+      liveRefreshToken: rt.refreshToken,
     };
+  }
 
-    // const refreshToken = this.jwtService.sign(payload, {
-    //   subject: TokenSubject.lock(payload),
-    //   algorithm: jwtConstants.algorithm,
-    //   expiresIn: jwtConstants.expiresIn,
-    // });
-    //
-    // return { refreshToken };
+  async createUser() {
+    return await this.usersService.createUser();
   }
 }

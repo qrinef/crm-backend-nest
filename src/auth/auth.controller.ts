@@ -1,19 +1,62 @@
-import { Controller, HttpCode, Body, Post } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  Body,
+  Post,
+  Get,
+  Res,
+  Req,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @HttpCode(200)
   @Post('login')
-  async login(@Body('email') email, @Body('password') password) {
-    return await this.authService.login(email, password);
+  @HttpCode(200)
+  async login(
+    @Res() res: Response,
+    @Body('email') email,
+    @Body('password') password,
+  ) {
+    const login = await this.authService.login(email, password);
+
+    if (!login) {
+      throw new UnauthorizedException();
+    }
+
+    res.cookie('auth._live_refresh_token', login.liveRefreshToken, {
+      httpOnly: true,
+    });
+    res.send({
+      token: login.token,
+      refresh_token: login.refreshToken,
+    });
   }
 
-  @HttpCode(200)
   @Post('refresh')
-  async refresh(@Body('refresh_token') refreshToken: string): Promise<any> {
-    return await this.authService.refreshToken(refreshToken);
+  @HttpCode(200)
+  async refresh(@Res() res: Response, @Req() request) {
+    const refresh = await this.authService.refreshToken(
+      request.cookies['auth._live_refresh_token'],
+    );
+
+    res.cookie('auth._live_refresh_token', refresh.liveRefreshToken, {
+      httpOnly: true,
+    });
+    res.send({
+      token: refresh.token,
+      refresh_token: refresh.refreshToken,
+    });
+  }
+
+  @Get('createUser')
+  @HttpCode(200)
+  async createUser() {
+    return await this.authService.createUser();
   }
 }

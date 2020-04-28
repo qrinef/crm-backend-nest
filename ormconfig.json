@@ -1,0 +1,14 @@
+{
+  "type": "postgres",
+  "host": "db",
+  "username": "user",
+  "password": "password",
+  "database": "test",
+  "entities": ["dist/**/*.entity.js"],
+  "migrations": ["dist/migration/**/*.js"],
+  "seeds": ["dist/database/seeds/**/*.js"],
+  "factories": ["dist/database/factories/**/*.js"],
+  "cli": {
+    "migrationsDir": "src/migration"
+  }
+}

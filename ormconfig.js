@@ -1,8 +1,9 @@
-import { join } from "path"
+// eslint-disable-next-line
+const { join } = require("path")
 
 const path = process.env.NODE_ENV !== 'production' ? 'src' : 'dist'
 
-export = {
+module.exports = {
   type: process.env.DB_DIALECT,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,

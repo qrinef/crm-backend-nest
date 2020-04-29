@@ -1,26 +1,30 @@
-version: "3"
+version: '3.7'
 
 services:
   app:
-    image: registry.gitlab.com/qrinef/crm-backend-nest:latest
-    container_name: crm-backend-nest
-    expose:
-      - 3010
-    environment:
-      VIRTUAL_HOST: crm-backend-nest.qrinef.ru
-      VIRTUAL_PORT: 3010
+    image: node:13-alpine
+    container_name: app
+    working_dir: /app
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    ports:
+      - 3010:3010
+    command: npm run start:dev
 
   db:
     image: postgres:12-alpine
     container_name: db
+    restart: always
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: test
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${TYPEORM_DATABASE}
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
     ports:
       - 5432:5432
-
-networks:
-  default:
-    external:
-      name: nginx-proxy

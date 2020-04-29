@@ -3,9 +3,10 @@ import { define } from 'typeorm-seeding';
 import { Users } from '../../users/users.entity';
 
 define(Users, (faker: typeof Faker) => {
-  const user = new Users();
-  user.email = 'admin@example.com';
-  user.password = 'password';
+  const users = new Users()
 
-  return user;
+  users.email = faker.internet.exampleEmail()
+  users.password = 'password'
+
+  return users
 });

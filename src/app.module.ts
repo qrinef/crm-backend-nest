@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
 import { CookieParserMiddleware } from '@nest-middlewares/cookie-parser';
 
 @Module({

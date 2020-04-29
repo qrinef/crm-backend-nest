@@ -1,5 +1,7 @@
 FROM node:13-alpine AS builder
 
+RUN apk add --no-cache python make g++
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -8,7 +10,6 @@ RUN npm ci
 COPY . .
 
 RUN npm run build
-
 
 FROM node:13-alpine AS production
 

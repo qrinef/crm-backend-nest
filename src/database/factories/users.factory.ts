@@ -5,7 +5,7 @@ import { Users } from '../../users/users.entity';
 define(Users, (faker: typeof Faker) => {
   const users = new Users()
 
-  users.email = faker.internet.exampleEmail()
+  users.email = faker.internet.exampleEmail().toLowerCase()
   users.password = 'password'
 
   return users

@@ -3,13 +3,11 @@ import {
   HttpCode,
   Body,
   Post,
-  Get,
   Res,
   Req,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 
 @Controller('auth')

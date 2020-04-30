@@ -55,8 +55,4 @@ export class AuthService {
       liveRefreshToken: rt.refreshToken,
     };
   }
-
-  async createUser() {
-    return await this.usersService.createUser();
-  }
 }

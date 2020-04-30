@@ -38,54 +38,17 @@ export class UsersService {
     return user;
   }
 
+  async findAll() {
+    return await this.usersRepository.find({
+      select: ['id', 'email', 'phone', 'name', 'surname'],
+    });
+  }
+
   async createUser() {
     let newUser = new Users();
     newUser.email = 'admin@example.com';
     newUser.password = 'password';
 
     return await this.usersRepository.save(newUser);
-  }
-
-  // async create(payload) {
-  //   return await this.profilesRepository.save(payload);
-  // }
-
-  // find(refresh_token: string): Promise<Profiles> {
-  //   return this.profilesRepository.findOne({ refresh_token });
-  // }
-
-  // async remove(res) {
-  //   return await this.profilesRepository.remove(res);
-  // }
-
-  async findAll() {
-    // await this.connection.transaction(async profiles => {
-    //   await profiles.save({
-    //     test: 'hello1'
-    //   });
-    //   await profiles.save({
-    //     test: 'hello2'
-    //   });
-    // });
-    // const queryRunner = this.connection.createQueryRunner();
-    // await queryRunner.connect();
-    // await queryRunner.startTransaction();
-    // try {
-    //   await queryRunner.manager.save(users[0]);
-    //   await queryRunner.manager.save(users[1]);
-    //
-    //   await queryRunner.commitTransaction();
-    // } catch (err) {
-    //   // since we have errors lets rollback the changes we made
-    //   await queryRunner.rollbackTransaction();
-    // } finally {
-    //   // you need to release a queryRunner which was manually instantiated
-    //   await queryRunner.release();
-    // }
-    // await this.profilesRepository.save({
-    //   name: 'hello',
-    //   description: 'test'
-    // });
-    // return this.profilesRepository.find();
   }
 }

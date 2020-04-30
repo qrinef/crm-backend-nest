@@ -15,7 +15,10 @@ const base = {
   entities: ["src/**/*.entity.ts"],
   migrations: ["src/database/migrations/**/*.ts"],
   seeds: ["src/database/seeds/**/*.ts"],
-  factories: ["src/database/factories/**/*.ts"]
+  factories: ["src/database/factories/**/*.ts"],
+  cli: {
+    migrationsDir: ["src/database/migrations"],
+  }
 }
 
 module.exports = process.env.NODE_ENV !== 'production' ? base : { ...base, ...production }

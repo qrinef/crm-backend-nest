@@ -10,6 +10,15 @@ export class Users {
   email: string;
 
   @Column()
+  phone: string;
+
+  @Column()
+  name: string;
+
+  @Column()
+  surname: string;
+
+  @Column()
   password: string;
 
   @BeforeInsert()

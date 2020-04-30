@@ -43,12 +43,4 @@ export class UsersService {
       select: ['id', 'email', 'phone', 'name', 'surname'],
     });
   }
-
-  async createUser() {
-    let newUser = new Users();
-    newUser.email = 'admin@example.com';
-    newUser.password = 'password';
-
-    return await this.usersRepository.save(newUser);
-  }
 }

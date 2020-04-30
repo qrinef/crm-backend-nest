@@ -53,10 +53,4 @@ export class AuthController {
       refresh_token: refresh.refreshToken,
     });
   }
-
-  @Get('createUser')
-  @HttpCode(200)
-  async createUser() {
-    return await this.authService.createUser();
-  }
 }

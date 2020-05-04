@@ -43,6 +43,10 @@ export class AuthController {
       request.cookies['auth._live_refresh_token'],
     );
 
+    if (!refresh) {
+      throw new UnauthorizedException();
+    }
+
     res.cookie('auth._live_refresh_token', refresh.liveRefreshToken, {
       httpOnly: true,
     });

@@ -26,7 +26,7 @@ export class AuthService {
     const refreshToken = await this.authRepository.save(authEntity);
 
     return {
-      token: this.jwtService.sign({ email }, { expiresIn: 180 }),
+      token: this.jwtService.sign({ email }, { expiresIn: 1800 }),
       refreshToken: this.jwtService.sign({
         exp: refreshToken.refreshTokenExpiration,
       }),
@@ -36,6 +36,11 @@ export class AuthService {
 
   public async refreshToken(refreshToken: string) {
     const refresh = await this.authRepository.findOne({ refreshToken });
+
+    if (!refresh) {
+      return null;
+    }
+
     await this.authRepository.remove(refresh);
     const loginResults = await this.usersService.findUser(refresh.user);
 
@@ -47,7 +52,7 @@ export class AuthService {
     return {
       token: this.jwtService.sign(
         { email: loginResults.email },
-        { expiresIn: 180 },
+        { expiresIn: 1800 },
       ),
       refreshToken: this.jwtService.sign({
         exp: rt.refreshTokenExpiration,

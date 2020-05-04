@@ -9,7 +9,6 @@ export class OrdersController {
   @Get()
   @UseGuards(AuthGuard('jwt'))
   async orders() {
-    await new Promise(r => setTimeout(r, 1000));
     return await this.ordersService.findAll();
   }
 }

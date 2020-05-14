@@ -14,7 +14,9 @@ export class Orders {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => Clients)
+  @ManyToOne(type => Clients, {
+    onDelete: 'CASCADE',
+  })
   client: Clients;
 
   @ManyToOne(type => Statuses)

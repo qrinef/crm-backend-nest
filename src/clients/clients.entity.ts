@@ -8,12 +8,12 @@ export class Clients {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   surname: string;
 }

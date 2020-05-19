@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   app:
-    image: registry.gitlab.com/qrinef/crm-backend-nest:latest
+    image: docker.pkg.github.com/qrinef/crm-backend-nest/crm-backend-nest:latest
     container_name: app
     restart: always
     env_file:

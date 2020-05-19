@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build and push to registry
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: docker.pkg.github.com
+      REGISTRY_IMAGE: qrinef/crm-backend-nest/crm-backend-nest
+      REGISTRY_USER: ${{ github.actor }}
+      REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@master
+
+      - name: Docker Login
+        run: echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY
+
+      - name: Build container image
+        run: docker build -t ${REGISTRY}/$REGISTRY_IMAGE -f .docker/Dockerfile .
+
+      - name: Push image
+        run: docker push ${REGISTRY}/$REGISTRY_IMAGE
